@@ -2,7 +2,7 @@ pipeline {
     agent any
 
     environment {
-        DOCKER_IMAGE = "devinareva/vault-spring-boot-simple-crud-jpa-2:latest"
+        DOCKER_IMAGE = "devinareva/vault-spring-boot-simple-crud-jpa:latest"
         PROJECT_DIR = 'simple-crud-jpa'
         ANSIBLE_DIR = '/home/jenkins/ansible'
     }
