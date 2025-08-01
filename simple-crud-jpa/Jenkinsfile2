@@ -5,6 +5,8 @@ pipeline {
         DOCKER_IMAGE = "devinareva/vault-spring-boot-simple-crud-jpa:latest"
         PROJECT_DIR = 'simple-crud-jpa'
         ANSIBLE_DIR = '/home/jenkins/ansible'
+        DOCKER_USERNAME = "devinareva"
+        DOCKER_PASSWORD = "SecureP@ssw0rd" 
     }
     
     stages {
@@ -37,12 +39,18 @@ pipeline {
             }
         }
         
-        stage ('Push Docker Image') {
+      stage('push docker image'){
             steps {
-                sh '''
-                    docker push ${DOCKER_IMAGE}
-                    docker logout
-                '''
+                script {
+                    withCredentials([usernamePassword(credentialsId: 'docker-hub', passwordVariable: "${DOCKER_PASSWORD}", usernameVariable: "${DOCKER_USERNAME}")]) {
+                        // Perintah docker login menggunakan variabel dari kredensial
+                        sh "docker login -u ${DOCKER_USERNAME} -p ${DOCKER_PASSWORD}"
+                        // Kemudian push image
+                        sh "docker push ${DOCKER_IMAGE}"
+                        // Opsional: Logout setelah push selesai untuk keamanan
+                        sh "docker logout"
+                    }
+                }
             }
         }
         
